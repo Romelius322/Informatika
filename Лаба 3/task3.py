@@ -1,21 +1,51 @@
 # TODO  Напишите функцию count_letters
 def count_letters(text):
-    letter_count={}
-    for char in text:
-        if char.isalpha():
-            char_lower = char.lower()
-            letter_count[char_lower]=letter_count.get(char_lower, 0) + 1
-    return letter_count
+    """
+    Подсчитывает количество каждой буквы в тексте.
+    Буквы верхнего и нижнего регистра считаются одинаковыми.
+    Возвращает словарь с буквами в нижнем регистре.
+    """
+    # Приводим весь текст к нижнему регистру
+    text = text.lower()
 
+    # Создаем пустой словарь для подсчета букв
+    letters_count = {}
+
+    # Проходим по каждому символу в тексте
+    for char in text:
+        # Проверяем, является ли символ буквой
+        if char.isalpha():
+            # Если буква уже есть в словаре, увеличиваем счетчик
+            if char in letters_count:
+                letters_count[char] += 1
+            else:
+                # Если буквы еще нет, добавляем ее со значением 1
+                letters_count[char] = 1
+
+    return letters_count
 
 # TODO Напишите функцию calculate_frequency
-def calculate_frequency(letter_count):
-    total_letters=sum(letter_count.values())
-    frequency = {}
-    for letter, count in letter_count.items():
-        frequency[letter]=round(count/total_letters, 2)
-    return frequency
+def calculate_frequency(letters_count):
+    """
+    Вычисляет частоту каждой буквы.
+    Частота = количество буквы / общее количество всех букв.
+    Возвращает словарь с частотами.
+    """
+    # Считаем общее количество букв
+    total_letters = sum(letters_count.values())
 
+    # Создаем словарь для частот
+    frequency = {}
+
+    # Для каждой буквы вычисляем ее частоту
+    for letter, count in letters_count.items():
+        # Делим количество на общее число букв
+        freq = count / total_letters
+        # Округляем до двух знаков после запятой
+        frequency[letter] = round(freq, 2)
+
+    return frequency
+# Основной текст
 main_str = """
 У лукоморья дуб зелёный;
 Златая цепь на дубе том:
@@ -51,8 +81,15 @@ main_str = """
 Под ним сидел, и кот учёный
 Свои мне сказки говорил.
 """
+# TODO Распечатайте в столбик букву и её частоту в тексте
+# Считаем количество букв
 letter_counts = count_letters(main_str)
-letter_frequencies = calculate_frequency(letter_counts)
 
-for frequency in sorted(letter_frequencies.values(), reverse=True):
-    print(f"{frequency:.2f}")
+# Вычисляем частоты
+frequencies = calculate_frequency(letter_counts)
+
+# Распечатываем результат в столбик
+print("Частотный анализ букв в тексте:")
+print("-" * 30)
+for letter, freq in frequencies.items():
+    print(f"{letter}: {freq:.2f}")  # :.2f - форматирование до 2 знаков
